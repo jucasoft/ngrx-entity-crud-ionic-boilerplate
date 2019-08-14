@@ -104,7 +104,6 @@ export class EditBaseComponent<T> implements OnInit, OnDestroy {
 
     async onDelete(value): Promise<void> {
         console.log('EditBaseComponent.onCopy()');
-        const cloned = {...{}, ...value, ...{id: undefined}};
         const alert = await this.alertController.create({
             header: 'Confirm!',
             message: this.confirmMessage,
@@ -117,7 +116,7 @@ export class EditBaseComponent<T> implements OnInit, OnDestroy {
                     text: 'Ok',
                     handler: () => {
                         console.log('Confirm Okay');
-                        this.onDeletePerform(cloned);
+                        this.onDeletePerform(value);
                     }
                 }
             ]
