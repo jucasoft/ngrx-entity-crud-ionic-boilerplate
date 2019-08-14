@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Actions} from 'ngrx-entity-crud';
-import {SkillStoreActions} from '@root-store/skill-store';
 import {Store} from '@ngrx/store';
 import {parseQueryString} from '@core/utils/j-utils';
 import {RootStoreState} from '@root-store/index';
@@ -25,7 +24,7 @@ export class SearchComponent implements OnInit {
 
     ngOnInit() {
         this.store$.dispatch(
-            SkillStoreActions.SearchRequest({queryParams: {}})
+            this.actions.SearchRequest({queryParams: {}})
         );
     }
 
