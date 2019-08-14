@@ -102,6 +102,35 @@ export class EditBaseComponent<T> implements OnInit, OnDestroy {
 
     }
 
+    async onDelete(value): Promise<void> {
+        console.log('EditBaseComponent.onCopy()');
+        const cloned = {...{}, ...value, ...{id: undefined}};
+        const alert = await this.alertController.create({
+            header: 'Confirm!',
+            message: this.confirmMessage,
+            buttons: [
+                {
+                    text: 'Delete',
+                    role: 'delete',
+                    cssClass: 'secondary'
+                }, {
+                    text: 'Ok',
+                    handler: () => {
+                        console.log('Confirm Okay');
+                        this.onDeletePerform(cloned);
+                    }
+                }
+            ]
+        });
+
+        await alert.present();
+
+    }
+
+    onDeletePerform(value): void {
+        throw new Error('Metodo da sovrascrivere');
+    }
+
     onSavePerform(value): void {
         throw new Error('Metodo da sovrascrivere');
     }
