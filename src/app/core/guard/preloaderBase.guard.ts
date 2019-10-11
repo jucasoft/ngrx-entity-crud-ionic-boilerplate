@@ -12,7 +12,7 @@ import {Actions, EntityCrudSelectors} from 'ngrx-entity-crud';
 export interface PreloaderGuardConfig<T> {
     actions: Actions<T>;
     selectors: EntityCrudSelectors<T, State>;
-    redirectPerform: ({id, item: T, routeState}) => Action;
+    redirectPerform: ({id, item: T, ruoteData: RuoteData}) => Action;
     selectId: (item: T) => string;
     plantId: (id: string, item: Partial<T>) => Partial<T>;
 }
@@ -55,6 +55,7 @@ export class PreloaderBaseGuard<T> implements CanActivate {
             select(createSelector(
                 RouterStoreSelectors.selectRouteParam('id'),
                 config.selectors.selectItemSelected,
+                RouterStoreSelectors.all,
                 (id: string, item: T) => ({id, item})
             )),
             // se non esiste l'id propago un errore, che permette alla rotta di proseguire senza precaricare dati
