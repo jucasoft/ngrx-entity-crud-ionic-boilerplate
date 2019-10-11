@@ -1,7 +1,7 @@
 import {createFeatureSelector, createSelector, MemoizedSelector} from '@ngrx/store';
 import * as fromRouter from '@ngrx/router-store';
 import {RouterReducerState} from '@ngrx/router-store';
-import {NavigationExtras} from '@angular/router';
+import {Data, NavigationExtras, Params} from '@angular/router';
 import {State} from './state';
 import {evalData} from '@core/utils/j-utils';
 
