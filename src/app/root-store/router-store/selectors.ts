@@ -35,3 +35,26 @@ export const {
   selectRouteData,      // select the current route data
   selectUrl,            // select the current url
 } = fromRouter.getSelectors(selectRouterState);
+
+export const all: MemoizedSelector<object, RuoteData> = createSelector(
+  selectQueryParams,
+  selectRouteParams,
+  selectRouteData,
+  selectUrl,
+  (selectQueryParamsA, selectRouteParamsA, selectRouteDataA, selectUrlA) => {
+    return {
+      selectQueryParams: selectQueryParamsA,
+      selectRouteParams: selectRouteParamsA,
+      selectRouteData: selectRouteDataA,
+      selectUrl: selectUrlA
+    };
+  }
+);
+
+export interface RuoteData {
+  selectQueryParams: Params;
+  selectRouteParams: Params;
+  selectRouteData: Data;
+  selectUrl: string;
+}
+
