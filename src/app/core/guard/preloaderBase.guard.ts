@@ -42,6 +42,34 @@ export interface PreloaderGuardConfig<T> {
 })
 export class PreloaderBaseGuard<T> implements CanActivate {
 
+  /**
+   *  Esemplio di configurazione:
+   *  protected config: PreloaderGuardConfig<Process> = {
+   *      actions: ProcessStoreActions,
+   *      selectors: ProcessStoreSelectors,
+   *      redirectPerform: ({id, item: Process, routeState}) => {
+   *           const state: PopUpData<Process> = {
+   *             item,
+   *             props: {title: 'Edit Process', route: 'process'}
+   *           };
+   *           // apro la popUP
+   *           this.store$.dispatch(RouterStoreActions.RouterGo({
+   *             path: ['process', {outlets: {popUp: ['edit']}}],
+   *             extras: {state}
+   *           }));
+   *      },
+   *      selectId: Process.selectId,
+   *      plantId: Process.plantId
+   *  };
+   *
+   *  metodi presenti nell'entità per la gestione della chiave univoca:
+   *   static selectId: (item: Process) => string = item => item.id;
+   *   static plantId: (id: string, item: Process) => Process = (id, item) => {
+   *     item.id = id;
+   *     return item;
+   *   };
+   *
+   */
     protected config: PreloaderGuardConfig<T>;
 
     constructor(private store$: Store<State>) {
