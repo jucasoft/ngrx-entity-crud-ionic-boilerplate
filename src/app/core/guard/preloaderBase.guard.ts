@@ -7,6 +7,7 @@ import {State} from '@root-store/state';
 import {RouterStoreSelectors} from '@root-store/router-store/index';
 import {evalData} from '@core/utils/j-utils';
 import {Actions, EntityCrudSelectors} from 'ngrx-entity-crud';
+import {RuoteData} from '@root-store/router-store/selectors';
 
 
 export interface PreloaderGuardConfig<T> {
@@ -42,34 +43,34 @@ export interface PreloaderGuardConfig<T> {
 })
 export class PreloaderBaseGuard<T> implements CanActivate {
 
-  /**
-   *  Esemplio di configurazione:
-   *  protected config: PreloaderGuardConfig<Process> = {
-   *      actions: ProcessStoreActions,
-   *      selectors: ProcessStoreSelectors,
-   *      redirectPerform: ({id, item: Process, routeState}) => {
-   *           const state: PopUpData<Process> = {
-   *             item,
-   *             props: {title: 'Edit Process', route: 'process'}
-   *           };
-   *           // apro la popUP
-   *           this.store$.dispatch(RouterStoreActions.RouterGo({
-   *             path: ['process', {outlets: {popUp: ['edit']}}],
-   *             extras: {state}
-   *           }));
-   *      },
-   *      selectId: Process.selectId,
-   *      plantId: Process.plantId
-   *  };
-   *
-   *  metodi presenti nell'entità per la gestione della chiave univoca:
-   *   static selectId: (item: Process) => string = item => item.id;
-   *   static plantId: (id: string, item: Process) => Process = (id, item) => {
-   *     item.id = id;
-   *     return item;
-   *   };
-   *
-   */
+    /**
+     *  Esemplio di configurazione:
+     *  protected config: PreloaderGuardConfig<Process> = {
+     *      actions: ProcessStoreActions,
+     *      selectors: ProcessStoreSelectors,
+     *      redirectPerform: ({id, item: Process, routeState}) => {
+     *           const state: PopUpData<Process> = {
+     *             item,
+     *             props: {title: 'Edit Process', route: 'process'}
+     *           };
+     *           // apro la popUP
+     *           this.store$.dispatch(RouterStoreActions.RouterGo({
+     *             path: ['process', {outlets: {popUp: ['edit']}}],
+     *             extras: {state}
+     *           }));
+     *      },
+     *      selectId: Process.selectId,
+     *      plantId: Process.plantId
+     *  };
+     *
+     *  metodi presenti nell'entità per la gestione della chiave univoca:
+     *   static selectId: (item: Process) => string = item => item.id;
+     *   static plantId: (id: string, item: Process) => Process = (id, item) => {
+     *     item.id = id;
+     *     return item;
+     *   };
+     *
+     */
     protected config: PreloaderGuardConfig<T>;
 
     constructor(private store$: Store<State>) {
@@ -84,7 +85,7 @@ export class PreloaderBaseGuard<T> implements CanActivate {
                 RouterStoreSelectors.selectRouteParam('id'),
                 config.selectors.selectItemSelected,
                 RouterStoreSelectors.all,
-                (id: string, item: T) => ({id, item})
+                (id: string, item: T, ruoteData: RuoteData) => ({id, item, ruoteData})
             )),
             // se non esiste l'id propago un errore, che permette alla rotta di proseguire senza precaricare dati
             tap(({id, item}) => {
@@ -101,7 +102,7 @@ export class PreloaderBaseGuard<T> implements CanActivate {
             take(1),
             // entro nel metodo che si occupa del redirect.
             map(config.redirectPerform),
-            map(this.store$.dispatch),
+            map(action => this.store$.dispatch(action)),
             // annnullo l'elemento precaricato
             tap(() => this.store$.dispatch(config.actions.SelectItem({item: null})))
         );
